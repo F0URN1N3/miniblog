@@ -4,7 +4,11 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\ShareData;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use App\Models\User;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class UserAuthController extends Controller
 {
@@ -30,7 +34,7 @@ class UserAuthController extends Controller
                 'max:50',
             ],
             //帳號(E-mail)
-            'account' => [
+            'email' => [
                 'required',
                 'max:50',
                 'email',
@@ -53,8 +57,21 @@ class UserAuthController extends Controller
 
         //資料錯誤處理
         if($validator->fails()){
-            return redirect('user/auth/sign-up')-> withErrors($validator);
+            return redirect('user/auth/sign-up')
+                -> withErrors($validator)
+                -> withInput();
         }
+
+        //密碼加密
+        $input['password']= Hash::make($input['password']);
+        //insert資料
+        User::create($input);
+
+        //將執行紀錄寫進storage\logs
+        DB::enableQueryLog();
+        Log::notice(print_r($input));
+
+        return redirect('user/auth/sign-up');
 
         exit;
     }

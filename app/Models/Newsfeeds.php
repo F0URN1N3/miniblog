@@ -5,25 +5,20 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class User extends Model
+class Newsfeeds extends Model
 {
     use HasFactory;
 
     //資料表名稱
-    protected $table = 'users';
+    protected $table = 'newsfeeds';
 
     //主鍵名稱
     protected $promaryKey = 'id';
 
     //可變動欄位
     protected $fillable = [
-        'name',
-        'email',
-        'password',
-        'sex',
-        'interest',
-        'introduce',
-        'picture',
+        'u_id',
+        'content',
         'enable',
     ];
 
