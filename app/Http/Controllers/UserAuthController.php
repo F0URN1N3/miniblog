@@ -12,12 +12,15 @@ use Illuminate\Support\Facades\Log;
 
 class UserAuthController extends Controller
 {
+    public $page = "";
     //使用者註冊
     public function signUpPage(){
         $name= 'sign_up';
         $binding= [
             'title'=> ShareData::TITLE,
             'name'=> $name,
+            'page' => $this->page,
+            'User' => $this->GetUserData(),
         ];
         return view('user.sign-up', $binding);
     }
@@ -64,16 +67,108 @@ class UserAuthController extends Controller
 
         //密碼加密
         $input['password']= Hash::make($input['password']);
+        //啟用紀錄SQL語法
+        DB::enableQueryLog();
         //insert資料
         User::create($input);
-
-        //將執行紀錄寫進storage\logs
-        DB::enableQueryLog();
-        Log::notice(print_r($input));
+        //在log中列印Eloquent SQL語法
+        Log::notice(print_r(DB::getQueryLog(), true));
 
         return redirect('user/auth/sign-up');
 
         exit;
+    }
+
+    //使用者登入畫面
+    public function signInPage(){
+        $name = 'sign_in';
+        $binding = [
+            'title' => ShareData::TITLE,
+            'name' => $name,
+            'page' => $this->page,
+            'User' => $this->GetUserData(),
+        ];
+        return view('user.sign-in', $binding);
+    }
+
+    //處理登入資料
+    public function signInProcess(){
+        //接收輸入資料
+        $input = request()->all();
+
+        //驗證規則
+        $rules = [
+            //帳號(E-mail)
+            'email' => [
+                'required',
+                'max:50',
+                'email',
+            ],
+            //密碼
+            'password' => [
+                'required',
+                'min:5',
+            ],
+        ];
+
+        //驗證資料
+        $validator = Validator::make($input, $rules);
+
+        if($validator->fails()){
+            //資料驗證錯誤
+            return redirect('/user/auth/sign-in')
+                ->withErrors($validator)
+                ->withInput();
+        }
+
+        //取得使用者資料
+        $User = User::where('email', $input['email'])->first();
+
+        if(!$User){
+            //帳號錯誤回傳錯誤訊息
+            $error_message = [
+                'msg' => [
+                    '帳號輸入錯誤',
+                ],
+            ];
+
+            return redirect('/user/auth/sign-in')
+                ->withErrors($error_message)
+                ->withInput();
+        }
+
+        //檢查密碼是否正確
+        $is_password_correct = Hash::check($input['password'], $User->password);
+
+        if(!$is_password_correct){
+            //密碼錯誤回傳錯誤訊息
+            $error_message = [
+                'msg' => [
+                    '密碼輸入錯誤',
+                ],
+            ];
+
+            return redirect('/user/auth/sign-in')
+                ->withErrors($error_message)
+                ->withInput();
+        }
+
+        //session紀錄會員編號
+        session()->put('user_id', $User->id);
+
+        //重新導向到原先使用者造訪頁面，沒有嘗試造訪頁則重新導向回自我介紹頁
+        return redirect()->intended('/admin/user');
+
+        exit;
+    }
+
+    //登出
+    public function signOut(){
+        //清除Session
+        session()->forget('user_id');
+
+        //重新導向回首頁
+        return redirect('/');
     }
 
 }

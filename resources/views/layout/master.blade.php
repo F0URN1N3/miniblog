@@ -10,41 +10,81 @@
   <boby>
     <div class="toolbar_section">
         <span class="toolbar_title">@yield('title')</span>
+
+        <div class="toolbar_right">
+            <span class="toolbar_text">
+                {{ $User != null ? $User->name."，您好！" : "未登入" }}
+            </span>
+        </div>
     </div>
 
     <div class="container">
         <div class="row">
             <div class="col-sm-1 form background_white">
                 <ul class="nav nav-pills nav-stacked">
+                    @if($page == "admin" && session()->has('user_id'))
+                        <!-- 自我介紹 -->
+                        <li
+                        @if($name == "user")
+                            class="active"
+                        @endif
+                        >
+                            <a href="/admin/user">自我介紹</a>
+                        </li>
+                        <!-- 心情隨筆 -->
+                        <li
+                        @if($name == "newsfeed")
+                            class="active"
+                        @endif
+                        >
+                            <a href="/admin/mind">心情隨筆</a>
+                        </li>
+                        <!-- 回到前台 -->
+                        <li>
+                            <a href="/">部落格</a>
+                        </li>
+                    @else
                     <!-- 首頁 -->
                     <li
                     @if($name == "home")
                         class="active"
                     @endif
                     >
-                        <a href="/">首頁</a>
+                        <a href="/">部落格</a>
                     </li>
-                    <!-- 註冊 -->
-                    <li
-                    @if($name == "sign_up")
-                        class="active"
+                    @if(session()->has('user_id'))
+                        <!-- 自我介紹 -->
+                        <li>
+                            <a href="/admin/user">進入後台</a>
+                        </li>
+                    @else
+                        <!-- 註冊 -->
+                        <li
+                        @if($name == "sign_up")
+                            class="active"
+                        @endif
+                        >
+                            <a href="/user/auth/sign-up">註冊</a>
+                        </li>
+                        <!-- 登入 -->
+                        <li
+                        @if($name == "sign_in")
+                            class="active"
+                        @endif
+                        >
+                            <a href="/user/auth/sign-in">登入</a>
+                        </li>
+
                     @endif
-                    >
-                        <a href="/user/auth/sign-up">註冊</a>
-                    </li>
-                    <!-- 登入 -->
-                    <li
-                    @if($name == "sign_in")
-                        class="active"
-                    @endif
-                    >
-                        <a href="/user/auth/sign-in">登入</a>
-                    </li>
+                @endif
+                @if(session()->has('user_id'))
                     <!-- 登出 -->
                     <li>
                         <a href="/user/auth/sign-out">登出</a>
                     </li>
+                @endif
                 </ul>
+                <div style="position: absolute; bottom: 1%;"><?php echo date('Y-m-d')?></div>
             </div>
             <div class="col-sm-11 background_white2">
                 @yield('content')

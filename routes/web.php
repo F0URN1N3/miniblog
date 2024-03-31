@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\UserAuthController;
+use App\Http\Controllers\AdminController;
 
 //首頁
 // Route::get('/', 'HomeController@indexPage');
@@ -38,3 +39,30 @@ Route::controller(UserAuthController::class)->group(function(){
         });
     });
 });
+
+Route::group(['prefix' => 'admin'], function(){
+    //自我介紹相關
+    Route::group(['prefix' => 'user'], function(){
+        //自我介紹頁面
+        Route::get('/', [AdminController::class, 'editUserPage']);
+        //處理自我介紹資料
+        Route::post('/', 'UserAuthController@editUserProcess');
+    });
+        //心情隨筆相關
+        Route::group(['prefix' => 'mind'], function(){
+            //心情隨筆列表頁面
+            Route::get('/', 'AdminController@mindListPage');
+            //新增心情隨筆資料
+            Route::get('/add', 'AdminController@addMindPage');
+            //處理心情隨筆資料
+            Route::post('/edit', 'AdminController@editMindProcess');
+            //單一資料
+            Route::group(['prefix' => '{mind_id}'], function(){
+                //編輯心情隨筆資料
+                Route::get('/edit', 'AdminController@editMindPage');
+                //刪除心情隨筆資料
+                Route::get('/delete', 'AdminController@deleteMindProcess');
+            });
+        });
+
+    });
