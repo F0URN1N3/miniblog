@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\UserAuthController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\ImageController;
 
 //首頁
 // Route::get('/', 'HomeController@indexPage');
@@ -46,7 +47,7 @@ Route::group(['prefix' => 'admin'], function(){
         //自我介紹頁面
         Route::get('/', [AdminController::class, 'editUserPage']);
         //處理自我介紹資料
-        Route::post('/', 'UserAuthController@editUserProcess');
+        Route::post('/', [AdminController::class, 'editUserProcess']);
     });
         //心情隨筆相關
         Route::group(['prefix' => 'mind'], function(){
@@ -66,3 +67,8 @@ Route::group(['prefix' => 'admin'], function(){
         });
 
     });
+
+Route::controller(ImageController::class)->group(function(){
+    Route::get('/image-upload', 'index')->name('image.form');
+    Route::post('/image-upload', 'storeImage')->name('image.store');
+});

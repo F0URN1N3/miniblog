@@ -5,7 +5,7 @@
 <!-- 傳送資料到母模板，並指定變數為content -->
 @section('content')
 
-<form id="form1" method="post" action="">
+<form id="form1" method="post" action="" enctype="multipart/form-data">
 <!-- 自動產生 csrf_token 隱藏欄位-->
 {{ csrf_field() }}
 <div class="normal_form">
@@ -17,11 +17,22 @@
                 <input name="email" class="form_textbox" type="text" value="{{ $User->email }}" readonly="true" placeholder="請輸入帳號"/>
             </div>
         </div>
+        <div class="col-sm-6">
+            <div class="form_label">暱稱</div>
+            <div class="form_textbox_region">
+                <input name="name" class="form_textbox" type="text" value="{{ $User->name }}" />
+            </div>
+        </div>
         <div class="div_clear"></div>
         <div class="col-sm-2">
             <div class="form_label">性別</div>
             <div class="form_textbox_region">
                 <select class="form_select" id="sex" name="sex" placeholder="請選擇性別">
+                    <option value="0"
+                    @if($User->sex == 0)
+                        selected
+                    @endif
+                    >未公開</option>
                     <option value="1"
                     @if($User->sex == 1)
                         selected
@@ -44,7 +55,7 @@
         <div class="col-sm-6">
             <div class="form_label">
                 圖片　
-                <input type="file" name="file" id="file" class="inputfile" />
+                <input type="file" name="file" id="file" class="inputfile" onchange="loadFile(event)" />
                 <label for="file">上傳圖片</label>
             </div>
             <div class="form_textbox_region">
@@ -52,7 +63,7 @@
                 @if($User->picture == "")
                     src="/images/nopic.png"
                 @else
-                    src="$User->picture"
+                    src="/{{$User->picture}}"
                 @endif
                 />
             </div>
@@ -77,21 +88,37 @@
 
 <script>
 //預覽圖片
-$("#file").change(function(){
-      //當檔案改變後，做一些事
-     readURL(this);   // this代表<input id="file">
-});
 
-function readURL(input){
-  if(input.files && input.files[0]){
-    var reader = new FileReader();
-    reader.onload = function (e) {
-       $("#file_review").attr('src', e.target.result);
+var loadFile = function(event) {
+    var output = document.getElementById('file_review');
+    output.src = URL.createObjectURL(event.target.files[0]);
+    output.onload = function() {
+      URL.revokeObjectURL(output.src) // free memory
     }
-    reader.readAsDataURL(input.files[0]);
   }
-}
-
-
 </script>
+
+<script type="module">
+    var iaoMsg= '';
+    <?PHP
+    if(isset($result)){
+        if($result == "success"){
+            echo('var iaoMsg= "修改資料成功!";');
+        }else{
+            echo('var iaoMsg= "";');
+        }
+    }
+
+    ?>
+    if(iaoMsg=="修改資料成功!"){
+        $.iaoAlert({
+            type: "success",
+            mode: "dark",
+            msg: iaoMsg,
+            position:'bottom-right',
+            roundedCorner:true,
+        })
+    }
+</script>
+
 @endsection

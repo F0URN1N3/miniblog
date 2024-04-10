@@ -5,7 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>@yield('title')</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
-    @vite(['resources/scss/app.scss'])
+    {{-- <script src="https://code.jquery.com/jquery-3.7.1.slim.min.js" integrity="sha256-kmHvs0B+OpCW5GVHUNjv9rOmY0IvSIRcf7zGUDTDQM8=" crossorigin="anonymous"></script> --}}
+
+    @vite(['resources/css/app.css', 'resources/scss/app.scss', 'resources/js/app.js'])
   </head>
   <boby>
     <div class="toolbar_section">
@@ -18,7 +20,7 @@
         </div>
     </div>
 
-    <div class="container">
+    <div class="container thistest1">
         <div class="row">
             <div class="col-sm-1 form background_white">
                 <ul class="nav nav-pills nav-stacked">

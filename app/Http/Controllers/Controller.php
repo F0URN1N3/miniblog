@@ -25,4 +25,5 @@ class Controller extends BaseController
 
         return $User;
     }
+
 }
