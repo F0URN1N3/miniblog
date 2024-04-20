@@ -32,7 +32,7 @@
                     @if($User->sex == 0)
                         selected
                     @endif
-                    >未公開</option>
+                    >不公開</option>
                     <option value="1"
                     @if($User->sex == 1)
                         selected

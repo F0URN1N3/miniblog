@@ -24,7 +24,7 @@
         <div class="row">
             <div class="col-sm-1 form background_white">
                 <ul class="nav nav-pills nav-stacked">
-                    @if($page == "admin" && session()->has('user_id'))
+                    @if($page== "admin" && session()->has('user_id'))
                         <!-- 自我介紹 -->
                         <li
                         @if($name == "user")
@@ -39,46 +39,74 @@
                             class="active"
                         @endif
                         >
-                            <a href="/admin/mind">心情隨筆</a>
+                            <a href="/admin/newsfeed">心情隨筆</a>
                         </li>
                         <!-- 回到前台 -->
                         <li>
+                            <a href="/">部落格首頁</a>
+                        </li>
+                    @elseif ($page== "user")
+                        <!-- 首頁 -->
+                        <li>
                             <a href="/">部落格</a>
                         </li>
-                    @else
-                    <!-- 首頁 -->
-                    <li
-                    @if($name == "home")
-                        class="active"
-                    @endif
-                    >
-                        <a href="/">部落格</a>
-                    </li>
-                    @if(session()->has('user_id'))
                         <!-- 自我介紹 -->
-                        <li>
-                            <a href="/admin/user">進入後台</a>
+                        <li
+                        @if($name == "user")
+                            class="active"
+                        @endif
+                        >
+                            <a href="/{{ $User->id }}/user">自我介紹</a>
+                        </li>
+                        <!-- 心情隨筆 -->
+                        <li
+                        @if($name == "newsfeed")
+                            class="active"
+                        @endif
+                        >
+                            <a href="/{{ $User->id }}/newsfeed">心情隨筆</a>
+                        </li>
+                        <!-- 留言板 -->
+                        <li
+                        @if($name == "board")
+                            class="active"
+                        @endif
+                        >
+                            <a href="/{{ $User->id }}/board">留言板</a>
                         </li>
                     @else
-                        <!-- 註冊 -->
+                        <!-- 首頁 -->
                         <li
-                        @if($name == "sign_up")
+                        @if($name == "home")
                             class="active"
                         @endif
                         >
-                            <a href="/user/auth/sign-up">註冊</a>
+                            <a href="/">部落格首頁</a>
                         </li>
-                        <!-- 登入 -->
-                        <li
-                        @if($name == "sign_in")
-                            class="active"
+                        @if(session()->has('user_id'))
+                            <!-- 自我介紹 -->
+                            <li>
+                                <a href="/admin/user">進入後台</a>
+                            </li>
+                        @else
+                            <!-- 註冊 -->
+                            <li
+                            @if($name == "sign_up")
+                                class="active"
+                            @endif
+                            >
+                                <a href="/user/auth/sign-up">註冊</a>
+                            </li>
+                            <!-- 登入 -->
+                            <li
+                            @if($name == "sign_in")
+                                class="active"
+                            @endif
+                            >
+                                <a href="/user/auth/sign-in">登入</a>
+                            </li>
                         @endif
-                        >
-                            <a href="/user/auth/sign-in">登入</a>
-                        </li>
-
                     @endif
-                @endif
                 @if(session()->has('user_id'))
                     <!-- 登出 -->
                     <li>

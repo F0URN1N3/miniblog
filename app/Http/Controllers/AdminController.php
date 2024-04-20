@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Log;
+use App\Models\Newsfeed;
 use Illuminate\Http\Request;
 use App\Models\ShareData;
 use Illuminate\Support\Facades\Storage;
@@ -13,7 +15,7 @@ class AdminController extends Controller
 {
     public $page = "admin";
 
-    //自我介紹頁面
+//個人資料頁面
     public function editUserPage(){
         $User = $this->GetUserData();
         if(!$User){
@@ -31,6 +33,7 @@ class AdminController extends Controller
         return view('admin.edituser', $binding);
     }
 
+//編輯個人資料
     public function editUserProcess(Request $request){
         $User= $this-> GetUserData();
         if(!$User){
@@ -74,7 +77,7 @@ class AdminController extends Controller
         if($request->file('file')){
             //刪除舊照片
             $old_picture= $User->picture;
-            if(file_exists(public_path($old_picture))){
+            if($old_picture!=null && file_exists(public_path($old_picture))){
                 unlink(public_path($old_picture));
             }
             //新增大頭貼
@@ -88,19 +91,24 @@ class AdminController extends Controller
             $User->picture= $relative_path;
         }
 
-        // if(isset($input['file'])){
-        //     $img= $input['file'];
-        //     $extension_name= $img->getClientOriginalExtension();
-        //     $file_name= uniqid().'.'.$extension_name;
-        //     $relative_path= 'images\\user\\'.$file_name;
-        //     $full_path= public_path($relative_path);
-        //     $image= Image::make($img)->resize(300,300)->save($full_path);
-        //     $User->picture= $relative_path;
-        // }
-        $User->name = $input['name'];
-        $User->sex = $input['sex'];
-        $User->interest = $input['interest'];
-        $User->introduce = $input['introduce'];
+        if($input['name']!= null){
+            $User->name = $input['name'];
+        }
+        if($input['sex']!= null){
+            $User->sex = $input['sex'];
+        }else{
+            $User->sex = 0;
+        }
+        if($input['interest']!= null){
+            $User->interest = $input['interest'];
+        }else{
+            $User->interest = '';
+        }
+        if($input['introduce']!= null){
+            $User->introduce = $input['introduce'];
+        }else{
+            $User->introduce = '';
+        }
         $User->save();
         $binding = [
             'title' => ShareData::TITLE,
@@ -112,7 +120,155 @@ class AdminController extends Controller
         return view('admin.edituser', $binding)
                 ->withErrors($validator);
 
-
     }
 
+//心情隨筆列表頁面
+    public function newsfeedListPage()
+    {
+        //先取得自己的資料
+        $User = $this->GetUserData();
+        //取得心情隨筆列表
+        $listPaginate = Newsfeed::where('u_id', $User->id)->paginate(3);
+        $name = 'newsfeed';
+
+        //接收輸入資料
+        $input = request()->all();
+
+        $result = '';
+        if(isset($input['result'])){
+            $result = $input['result'];
+        }
+
+        $binding = [
+            'title' => ShareData::TITLE,
+            'page' => $this->page,
+            'name' => $name,
+            'User' => $User,
+            'listPaginate' => $listPaginate,
+            'result' => $result,
+        ];
+        return view('admin.newsfeedlist', $binding);
+    }
+
+//新增心情隨筆資料頁面
+    function addNewsfeedPage()
+    {
+        //先取得自己的資料
+        $User = $this->GetUserData();
+        //取得心情隨筆列表
+        $newsfeed = new Newsfeed;
+        $name = 'newsfeed';
+        $action = '新增';
+
+        $binding = [
+            'title' => ShareData::TITLE,
+            'page' => $this->page,
+            'name' => $name,
+            'User' => $User,
+            'newsfeed' => $newsfeed,
+            'action' => $action,
+            'result' => '',
+        ];
+        return view('admin.newsfeed', $binding);
+    }
+
+//編輯心情隨筆資料
+    function editNewsfeedProcess()
+    {
+        $User = $this->GetUserData();
+        if(!$User){
+            return redirect('/');
+        }
+        $name = 'newsfeed';
+
+        //接收輸入資料
+        $input = request()->all();
+
+        //驗證規則
+        $rules = [
+            //內容
+            'content' => [
+                'required',
+                'max:1000',
+            ],
+        ];
+
+        //驗證資料
+        $validator = Validator::make($input, $rules);
+
+        if($input['id'] == ''){
+            //新增
+            $action = '新增';
+            $newsfeed = new Newsfeed;
+            $newsfeed->content = $input['content'];
+        }
+        else{
+            //修改
+            $action = '修改';
+            //取得心情隨筆列表
+            $newsfeed = Newsfeed::where('id', $input['id'])->where('u_id', $User->id)->first();
+
+            if(!$newsfeed){
+                //如果找不到資料就回列表頁
+                return redirect('/admin/newsfeed');
+            }
+            $newsfeed->content = $input['content'];
+        }
+
+        if($validator->fails()){
+            $binding = [
+                'title' => ShareData::TITLE,
+                'page' => $this->page,
+                'name' => $name,
+                'User' => $User,
+                'newsfeed' => $newsfeed,
+                'action' => $action,
+                'result' => '',
+            ];
+            return view('admin.newsfeed', $binding)
+                ->withErrors($validator);
+        }
+        //新增
+        if($input['id'] == ''){
+            $input["u_id"] = $User->id;
+            $input["enable"] = 1;
+            Newsfeed::create($input);
+        }
+        else{
+            //修改
+            $newsfeed->save();
+        }
+
+        //成功就轉回列表頁
+        return redirect('/admin/newsfeed/?result=success');
+    }
+
+//編輯心情隨筆資料
+    function editNewsfeedPage($newsfeed_id)
+    {
+        //先取得自己的資料
+        $User = $this->GetUserData();
+        //取得心情隨筆列表
+        $newsfeed = Newsfeed::where('id', $newsfeed_id)->where('u_id', $User->id)->first();
+
+        if(!$newsfeed)
+        {
+            //如果找不到資料就回列表頁
+            return redirect('/admin/newsfeed');
+        }
+
+        $name = 'newsfeed';
+        $action = '修改';
+
+        $binding = [
+            'title' => ShareData::TITLE,
+            'page' => $this->page,
+            'name' => $name,
+            'User' => $User,
+            'newsfeed' => $newsfeed,
+            'action' => $action,
+            'result' => '',
+        ];
+        return view('admin.newsfeed', $binding);
+    }
 }

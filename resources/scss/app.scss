@@ -41,8 +41,8 @@ $bodyFormPadding1      : 24px;
 $bodyFormPadding2      : 12px;
 
 body {
-    overflow-x: hidden;
-    overflow-y: hidden;
+    overflow: auto;
+    overflow-y: auto;
 }
 
 //上面Bar的樣式

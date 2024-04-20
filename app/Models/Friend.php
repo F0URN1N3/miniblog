@@ -5,12 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Newsfeeds extends Model
+class Friend extends Model
 {
     use HasFactory;
 
     //資料表名稱
-    protected $table = 'newsfeeds';
+    protected $table = 'friends';
 
     //主鍵名稱
     protected $promaryKey = 'id';
@@ -18,8 +18,7 @@ class Newsfeeds extends Model
     //可變動欄位
     protected $fillable = [
         'u_id',
-        'content',
-        'enable',
+        'f_id',
     ];
 
 }
