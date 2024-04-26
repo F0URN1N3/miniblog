@@ -17,14 +17,58 @@
             <span class="toolbar_text">
                 {{ $User != null ? $User->name."，您好！" : "未登入" }}
             </span>
+            <div class="dropdown" style="float: right; margin-right: 1px;">
+                <img
+                @if (!$User || $User->picture=='')
+                    src="/images/gears.png"
+                @else
+                    src="/{{$User->picture}}"
+                @endif
+                style="height:60px;" class="btn" data-bs-toggle="dropdown"aria-expanded="false">
+                <ul class="dropdown-menu dropdown-menu-end">
+                    <li><a class="dropdown-item" href="/">首頁</a></li>
+                @if(session()->has('user_id'))
+                    <li><a class="dropdown-item" href="/admin/user">個人資料</a></li>
+                    <li><a class="dropdown-item" href="/admin/newsfeed">隨口說說</a></li>
+                    <hr>
+                    <li><a class="dropdown-item" href="/user/auth/sign-out">登出</a></li>
+                @else
+                    <li><a class="dropdown-item" href="/user/auth/sign-in">登入</a></li>
+                    <hr>
+                    <li><a class="dropdown-item" href="/user/auth/sign-up">註冊</a></li>
+                @endif
+                </ul>
+            </div>
         </div>
     </div>
-
     <div class="container thistest1">
         <div class="row">
             <div class="col-sm-1 form background_white">
                 <ul class="nav nav-pills nav-stacked">
-                    @if($page== "admin" && session()->has('user_id'))
+                    @if ($page== "user")
+                        <!-- 首頁 -->
+                        <li>
+                            關於<h4>{{ $userData->name }}</h4>
+                        </li>
+                        <!-- 自我介紹 -->
+                        <li
+                        @if($name == "user")
+                            class="active"
+                        @endif
+                        >
+                            <a href="/{{ $userData->id }}/user">自我介紹</a>
+                        </li>
+                        <!-- 隨口說說 -->
+                        <li
+                        @if($name == "newsfeed")
+                            class="active"
+                        @endif
+                        >
+                            <a href="/{{ $userData->id }}/newsfeed">隨口說說</a>
+                        </li>
+                        <hr>
+                        <li><a href="/">回到首頁</a></li>
+                    @elseif($page== "admin" && session()->has('user_id'))
                         <!-- 自我介紹 -->
                         <li
                         @if($name == "user")
@@ -33,47 +77,16 @@
                         >
                             <a href="/admin/user">自我介紹</a>
                         </li>
-                        <!-- 心情隨筆 -->
+                        <!-- 隨口說說 -->
                         <li
                         @if($name == "newsfeed")
                             class="active"
                         @endif
                         >
-                            <a href="/admin/newsfeed">心情隨筆</a>
+                            <a href="/admin/newsfeed">隨口說說</a>
                         </li>
-                        <!-- 回到前台 -->
-                        <li>
-                            <a href="/">部落格首頁</a>
-                        </li>
-                    @elseif ($page== "user")
-                        <!-- 首頁 -->
-                        <li>
-                            <a href="/">部落格</a>
-                        </li>
-                        <!-- 自我介紹 -->
-                        <li
-                        @if($name == "user")
-                            class="active"
-                        @endif
-                        >
-                            <a href="/{{ $User->id }}/user">自我介紹</a>
-                        </li>
-                        <!-- 心情隨筆 -->
-                        <li
-                        @if($name == "newsfeed")
-                            class="active"
-                        @endif
-                        >
-                            <a href="/{{ $User->id }}/newsfeed">心情隨筆</a>
-                        </li>
-                        <!-- 留言板 -->
-                        <li
-                        @if($name == "board")
-                            class="active"
-                        @endif
-                        >
-                            <a href="/{{ $User->id }}/board">留言板</a>
-                        </li>
+                        <hr>
+                        <li><a href="/">回到首頁</a></li>
                     @else
                         <!-- 首頁 -->
                         <li
@@ -81,13 +94,9 @@
                             class="active"
                         @endif
                         >
-                            <a href="/">部落格首頁</a>
+                            <a href="/">首頁</a>
                         </li>
                         @if(session()->has('user_id'))
-                            <!-- 自我介紹 -->
-                            <li>
-                                <a href="/admin/user">進入後台</a>
-                            </li>
                         @else
                             <!-- 註冊 -->
                             <li
@@ -107,12 +116,6 @@
                             </li>
                         @endif
                     @endif
-                @if(session()->has('user_id'))
-                    <!-- 登出 -->
-                    <li>
-                        <a href="/user/auth/sign-out">登出</a>
-                    </li>
-                @endif
                 </ul>
                 <div style="position: absolute; bottom: 1%;"><?php echo date('Y-m-d')?></div>
             </div>

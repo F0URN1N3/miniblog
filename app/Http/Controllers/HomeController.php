@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\ShareData;
 use App\Models\User;
 use App\Models\Newsfeed;
+use Illuminate\Support\Facades\DB;
 
 class HomeController extends Controller
 {
@@ -13,8 +14,29 @@ class HomeController extends Controller
     //首頁
     public function indexPage(){
         $name= 'home';
+        //DB::enableQueryLog();
 
-        $user_list= User::all();
+        //取得用戶主頁連結
+        $user_list=
+        User::query()
+        ->select('users.*')
+        ->join('newsfeeds', function ($join) {
+            $join->on('users.id', '=', 'newsfeeds.u_id')
+                ->whereRaw('newsfeeds.created_at = (SELECT MAX(created_at) FROM newsfeeds WHERE u_id = users.id)');
+        })
+        ->orderBy('newsfeeds.created_at', 'desc')
+        ->get();
+
+        $newsfeedList=
+        Newsfeed::query()
+        ->select('newsfeeds.*', 'users.name')
+        ->join('users', 'users.id', '=', 'newsfeeds.u_id')
+        ->orderBy('created_at', 'desc')
+        ->get()
+        ;
+
+
+        //print_r(DB::getQueryLog());
 
         $binding=[
             'title'=> ShareData::TITLE,
@@ -22,6 +44,7 @@ class HomeController extends Controller
             'page' => $this->page,
             'User' => $this->GetUserData(),
             'user_list' => $user_list,
+            'newsfeedList' => $newsfeedList,
         ];
         return view('home', $binding);
     }
@@ -40,7 +63,7 @@ class HomeController extends Controller
             'title' => ShareData::TITLE,
             'page' => $this->page,
             'name' => $name,
-            'User' => $userData,
+            'User' => $this->GetUserData(),
             'userData' => $userData,
         ];
 
@@ -55,8 +78,9 @@ class HomeController extends Controller
 
         $userData = User::where('id', $user_id)->first();
 
-        if(!$userData)
+        if(!$userData){
             return redirect('/');
+        }
 
         $newsfeedList = Newsfeed::where('u_id', $user_id)->orderby('created_at', 'desc')->get();
 

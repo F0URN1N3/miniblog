@@ -9,9 +9,9 @@
 <!-- 自動產生 csrf_token 隱藏欄位-->
 {!! csrf_field() !!}
 <div class="normal_form">
-    <div class="form_title">心情隨筆列表</div>
+    <div class="form_title">曾經隨口說說</div>
     <div class="btn_group">
-        <button type="button" class="btn btn-primary btn_form" onclick="AddData()">新增</button>
+        <button type="button" class="btn btn-primary btn_form" onclick="AddData()">再說一句</button>
     </div>
     <div class="table-responsive">
         <table class="table table-hover form_label">
@@ -38,12 +38,12 @@
 </div>
 {{ $listPaginate}}
 <script>
-    //新增心情隨筆
+    //新增隨口說說
     function AddData()
     {
         location.href = "/admin/newsfeed/add";
     }
-    //編輯心情隨筆
+    //編輯隨口說說
     function EditData($id)
     {
         location.href = "/admin/newsfeed/" + $id + "/edit";

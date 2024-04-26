@@ -2,7 +2,7 @@
 @section('title', $title)
 @section('content')
 <div>
-    <p class="body_title">自我介紹</p>
+    <p class="body_title">個人資料</p>
 </div>
 <div class="body_show_region form_radius">
     <div class="">

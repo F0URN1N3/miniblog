@@ -9,5 +9,5 @@ class ShareData extends Model
 {
     use HasFactory;
 
-    const TITLE= '使用Laravel框架建立迷你部落格';
+    const TITLE= '隨口說說的小天地';
 }

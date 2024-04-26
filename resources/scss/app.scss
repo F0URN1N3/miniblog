@@ -23,7 +23,7 @@ $mainFont2             : 16px;
 $toolBarFont           : 16px;
 $loginTitleFont        : 32px;
 $formMainFont          : 20px;
-$formTextBoxTextFont   : 16px;
+$formTextBoxTextFont   : 20px;
 $formIconFont          : 14px;
 $formTextBoxBorderFont : 40px;
 $formTextBoxBorderFont2: 24px;
@@ -33,8 +33,8 @@ $bodyFormRowMargin     : 40px;
 $mainLeftMargin        : 24px;
 $bodyFormMargin        : 16px;
 $bodyFormMargin1       : 20px;
-$bodyFormMargin2       : 12px;
-$bodyFormMargin3       : 30px;
+$bodyFormMargin2       : 0px;
+$bodyFormMargin3       : 0px;
 $buttonTopMargin       : 10px;
 $bodyFormRowMargin     : 40px;
 $bodyFormPadding1      : 24px;
@@ -211,18 +211,15 @@ body {
     padding: 10px;
 }
 
-.col-10 {
-    width: 10%;
-    float: left;
 
     .circle_img {
         margin       : auto;
         cursor       : pointer;
-        width        : calc(9vw - 10px - 2px);
-        height       : calc(9vw - 10px - 2px);
+        width        : calc(10vw - 10px - 2px);
+        height       : calc(10vw - 10px - 2px);
         border-radius: 100%;
     }
-}
+
 
 .div_clear {
     clear: both;
@@ -287,6 +284,21 @@ body {
     }
 }
 
+.margin_eachNewsfeed{
+    margin-top: 1.5%;
+}
+
+.nwsfd_u_name{
+    color:#009f1d;
+    font-weight:bold;
+    font-size:18px
+}
+
+.nwsfd_goComment{
+    text-align: center;
+    border: solid 1px #009f1d;
+    border-radius: 3px;
+}
 
 /****************圖片上傳相關****************/
 
@@ -348,7 +360,7 @@ td.right {
 
 //選單
 .nav-pills>li {
-    width: 100%;
+    width: 95%;
 
     &>a {
         border-radius: 0;
@@ -361,7 +373,7 @@ td.right {
     }
 
     &.active {
-        border-right: solid 4px $mainColor;
+        border-right: solid 2px $mainColor;
 
         &>a {
             color     : $mainColor;
@@ -393,3 +405,22 @@ td.right {
     font-weight:bold;
     font-size: 14px;
 }
+
+/****************首頁顯示水平滾動軸****************/
+div.scrollmenu {
+    background-color: #ffffff;
+    overflow: auto;
+    white-space: nowrap;
+  }
+
+  div.scrollmenu a {
+    display: inline-block;
+    color: white;
+    text-align: center;
+    padding: 14px;
+    text-decoration: none;
+  }
+
+  div.scrollmenu a:hover {
+    background-color: #777;
+  }

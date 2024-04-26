@@ -6,6 +6,9 @@ use App\Http\Controllers\UserAuthController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ImageController;
 use Illuminate\Routing\Controllers\Middleware;
+use Illuminate\Support\Facades\Redirect;
+use App\Models\User;
+use Illuminate\Support\Facades\Hash;
 
 //新版group化寫法
 Route::controller(UserAuthController::class)->group(function(){
@@ -57,6 +60,9 @@ Route::controller(HomeController::class)->group(function(){
         Route::get('/newsfeed', 'newsfeedPage');
         Route::get('/board', 'boardPage');
     });
+    Route::prefix('/{newsfeed_id}')->group(function(){
+        Route::get('/comment', 'newsfeedComment');
+    });
 });
 
 
@@ -65,4 +71,19 @@ Route::controller(HomeController::class)->group(function(){
 Route::controller(ImageController::class)->group(function(){
     Route::get('/image-upload', 'index')->name('image.form');
     Route::post('/image-upload', 'storeImage')->name('image.store');
+});
+//自動創建大量帳戶
+Route::get('/auto', function () {
+    $u_pwd= Hash::make('123123');
+    for($i=3; $i<30; $i++){
+        $data=
+        [
+            'email'=> 'user'.$i.'@email.com',
+            'password'=> $u_pwd,
+            'name'=> 'user'.$i,
+        ];
+
+        User::insert($data);
+    }
+    echo "auto fill sucsess!";
 });
