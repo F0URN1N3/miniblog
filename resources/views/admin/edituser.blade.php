@@ -14,7 +14,7 @@
         <div class="col-sm-6">
             <div class="form_label">帳號</div>
             <div class="form_textbox_region">
-                <input name="email" class="form_textbox" type="text" value="{{ $User->email }}" readonly="true" placeholder="請輸入帳號"/>
+                <span class="form_label">{{ $User->email }}</span>
             </div>
         </div>
         <div class="col-sm-6">

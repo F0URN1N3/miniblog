@@ -9,44 +9,28 @@
 <!-- 自動產生 csrf_token 隱藏欄位-->
 {!! csrf_field() !!}
 <div class="normal_form">
-    <div class="form_title">曾經隨口說說</div>
+    <div class="form_title">備忘錄列表</div>
     <div class="btn_group">
-        <button type="button" class="btn btn-primary btn_form" onclick="AddData()">再說一句</button>
+        <button type="button" class="btn btn-primary btn_form" onclick="AddData()">新增</button>
     </div>
-    <div class="table-responsive">
-        <table class="table table-hover form_label">
-            <thead>
-                <tr>
-                    <th>日期</th>
-                    <th>內容</th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach($listPaginate as $data)
-                <tr>
-                    <td>{{ $data->created_at }}</td>
-                    <td>{{ $data->content }}</td>
-                    <td class="right">
-                    <button type="button" class="btn btn-success btn_form" onclick="EditData({{ $data->id }})">修改</button>
-                    </td>
-                </tr>
-                @endforeach
-            </tbody>
-        </table>
+    <div class="body_show_region form_radius">
+        @foreach($newsfeedList as $each_newsfeed)
+        <div class="margin_eachNewsfeed">
+            <span>時間: {{ $each_newsfeed->created_at }} 說：</span>
+            @if(isset($User) && $User->id == $each_newsfeed->u_id)
+            <span style="float:right;"><a href="/admin/newsfeed/{{ $each_newsfeed->id }}/edit">編輯備忘錄</a></span>
+            @endif
+        </div>
+        <div class="body_content">{{ $each_newsfeed->content }}</div>
+        <div class="nwsfd_goComment"><a href="/{{ $each_newsfeed->id }}/comment/">查看回應</a></div>
+
+        @endforeach
     </div>
-</div>
-{{ $listPaginate}}
 <script>
-    //新增隨口說說
+    //新增備忘錄
     function AddData()
     {
         location.href = "/admin/newsfeed/add";
-    }
-    //編輯隨口說說
-    function EditData($id)
-    {
-        location.href = "/admin/newsfeed/" + $id + "/edit";
     }
 </script>
 

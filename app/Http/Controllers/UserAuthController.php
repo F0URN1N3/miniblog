@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Log;
 class UserAuthController extends Controller
 {
     public $page = "";
-    //使用者註冊
+//使用者註冊頁面
     public function signUpPage(){
         $name= 'sign_up';
         $binding= [
@@ -25,6 +25,7 @@ class UserAuthController extends Controller
         return view('user.sign-up', $binding);
     }
 
+//使用者註冊程式
     public function signUpProcess(){
         //接收輸入資料
         $input = request()-> all();
@@ -73,13 +74,17 @@ class UserAuthController extends Controller
         User::create($input);
         //在log中列印Eloquent SQL語法
         Log::notice(print_r(DB::getQueryLog(), true));
+        //申請成功就直接登入
+        $User = User::where('email', $input['email'])->first();
+        //session紀錄會員編號
+        session()->put('user_id', $User->id);
 
-        return redirect('user/auth/sign-up');
+        return redirect('/');
 
         exit;
     }
 
-    //使用者登入畫面
+//使用者登入畫面
     public function signInPage(){
         $name = 'sign_in';
         $binding = [
@@ -91,7 +96,7 @@ class UserAuthController extends Controller
         return view('user.sign-in', $binding);
     }
 
-    //處理登入資料
+//使用者登入程式
     public function signInProcess(){
         //接收輸入資料
         $input = request()->all();
@@ -157,7 +162,7 @@ class UserAuthController extends Controller
         session()->put('user_id', $User->id);
 
         //重新導向到原先使用者造訪頁面，沒有嘗試造訪頁則重新導向回自我介紹頁
-        return redirect()->intended('/admin/user');
+        return redirect()->intended('/');
 
         exit;
     }

@@ -25,7 +25,7 @@
         <span class="nwsfd_u_name">{{ $each_newsfeed->name }}</span>
         <span>{{ $each_newsfeed->created_at }} 說：</span>
             @if(isset($User) && $User->id == $each_newsfeed->u_id)
-            <span style="float:right;"><a href="/admin/newsfeed/{{ $each_newsfeed->id }}/edit">編輯說法</a></span>
+            <span style="float:right;"><a href="/admin/newsfeed/{{ $each_newsfeed->id }}/edit">備忘錄</a></span>
             @endif
     </div>
     <div class="body_content">{{ $each_newsfeed->content }}</div>
@@ -37,6 +37,10 @@
     function Visit(id){
         location.href= "/" + id + "/user" ;
     }
+</script>
+
+<script type="module">
+    console.log('jquery:'+ $().jquery);
 </script>
 
 @endsection

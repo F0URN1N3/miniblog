@@ -26,16 +26,16 @@
                 @endif
                 style="height:60px;" class="btn" data-bs-toggle="dropdown"aria-expanded="false">
                 <ul class="dropdown-menu dropdown-menu-end">
-                    <li><a class="dropdown-item" href="/">首頁</a></li>
+                    <li><a class="dropdown-item" href="/">回到首頁</a></li>
                 @if(session()->has('user_id'))
-                    <li><a class="dropdown-item" href="/admin/user">個人資料</a></li>
-                    <li><a class="dropdown-item" href="/admin/newsfeed">隨口說說</a></li>
+                    <li><a class="dropdown-item" href="/admin/user">編輯個人資料</a></li>
+                    <li><a class="dropdown-item" href="/admin/newsfeed">備忘錄列表</a></li>
                     <hr>
                     <li><a class="dropdown-item" href="/user/auth/sign-out">登出</a></li>
                 @else
-                    <li><a class="dropdown-item" href="/user/auth/sign-in">登入</a></li>
-                    <hr>
                     <li><a class="dropdown-item" href="/user/auth/sign-up">註冊</a></li>
+                    <hr>
+                    <li><a class="dropdown-item" href="/user/auth/sign-in">登入</a></li>
                 @endif
                 </ul>
             </div>
@@ -43,12 +43,12 @@
     </div>
     <div class="container thistest1">
         <div class="row">
-            <div class="col-sm-1 form background_white">
+            <div class="col-sm-2 form background_white">
                 <ul class="nav nav-pills nav-stacked">
                     @if ($page== "user")
                         <!-- 首頁 -->
                         <li>
-                            關於<h4>{{ $userData->name }}</h4>
+                            組員<h4>{{ $userData->name }}</h4>
                         </li>
                         <!-- 自我介紹 -->
                         <li
@@ -56,7 +56,7 @@
                             class="active"
                         @endif
                         >
-                            <a href="/{{ $userData->id }}/user">自我介紹</a>
+                            <a href="/{{ $userData->id }}/user">組員資料</a>
                         </li>
                         <!-- 隨口說說 -->
                         <li
@@ -64,7 +64,7 @@
                             class="active"
                         @endif
                         >
-                            <a href="/{{ $userData->id }}/newsfeed">隨口說說</a>
+                            <a href="/{{ $userData->id }}/newsfeed">備忘錄列表</a>
                         </li>
                         <hr>
                         <li><a href="/">回到首頁</a></li>
@@ -75,7 +75,7 @@
                             class="active"
                         @endif
                         >
-                            <a href="/admin/user">自我介紹</a>
+                            <a href="/admin/user">編輯個人資料</a>
                         </li>
                         <!-- 隨口說說 -->
                         <li
@@ -83,7 +83,7 @@
                             class="active"
                         @endif
                         >
-                            <a href="/admin/newsfeed">隨口說說</a>
+                            <a href="/admin/newsfeed">備忘錄列表</a>
                         </li>
                         <hr>
                         <li><a href="/">回到首頁</a></li>
@@ -96,8 +96,7 @@
                         >
                             <a href="/">首頁</a>
                         </li>
-                        @if(session()->has('user_id'))
-                        @else
+                        @if(session()->has('user_id')==false)
                             <!-- 註冊 -->
                             <li
                             @if($name == "sign_up")
@@ -117,9 +116,9 @@
                         @endif
                     @endif
                 </ul>
-                <div style="position: absolute; bottom: 1%;"><?php echo date('Y-m-d')?></div>
+                <div style="position: absolute; bottom: 1%; left:1%;"><?php echo date('Y-m-d')?></div>
             </div>
-            <div class="col-sm-11 background_white2">
+            <div class="col-sm-10 background_white2">
                 @yield('content')
             </div>
         </div>

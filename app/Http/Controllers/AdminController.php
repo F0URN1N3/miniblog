@@ -71,7 +71,6 @@ class AdminController extends Controller
                 'result' => '',
             ];
             return view('admin.edituser', $binding)->withErrors($validator);
-
         }
 
         if($request->file('file')){
@@ -120,15 +119,16 @@ class AdminController extends Controller
         return view('admin.edituser', $binding)
                 ->withErrors($validator);
 
+
     }
 
-//心情隨筆列表頁面
+//備忘錄列表頁面
     public function newsfeedListPage()
     {
         //先取得自己的資料
         $User = $this->GetUserData();
-        //取得心情隨筆列表
-        $listPaginate = Newsfeed::where('u_id', $User->id)->paginate(3);
+        //取得備忘錄列表
+        $newsfeedList = Newsfeed::where('u_id', $User->id)->get();
         $name = 'newsfeed';
 
         //接收輸入資料
@@ -144,18 +144,18 @@ class AdminController extends Controller
             'page' => $this->page,
             'name' => $name,
             'User' => $User,
-            'listPaginate' => $listPaginate,
+            'newsfeedList' => $newsfeedList,
             'result' => $result,
         ];
         return view('admin.newsfeedlist', $binding);
     }
 
-//新增心情隨筆資料頁面
+//新增備忘錄資料頁面
     function addNewsfeedPage()
     {
         //先取得自己的資料
         $User = $this->GetUserData();
-        //取得心情隨筆列表
+        //取得備忘錄列表
         $newsfeed = new Newsfeed;
         $name = 'newsfeed';
         $action = '新增';
@@ -172,7 +172,7 @@ class AdminController extends Controller
         return view('admin.newsfeed', $binding);
     }
 
-//編輯心情隨筆資料
+//編輯備忘錄資料
     function editNewsfeedProcess()
     {
         $User = $this->GetUserData();
@@ -205,7 +205,7 @@ class AdminController extends Controller
         else{
             //修改
             $action = '修改';
-            //取得心情隨筆列表
+            //取得備忘錄列表
             $newsfeed = Newsfeed::where('id', $input['id'])->where('u_id', $User->id)->first();
 
             if(!$newsfeed){
@@ -243,12 +243,12 @@ class AdminController extends Controller
         return redirect('/admin/newsfeed/?result=success');
     }
 
-//編輯心情隨筆資料
+//編輯備忘錄資料
     function editNewsfeedPage($newsfeed_id)
     {
         //先取得自己的資料
         $User = $this->GetUserData();
-        //取得心情隨筆列表
+        //取得備忘錄列表
         $newsfeed = Newsfeed::where('id', $newsfeed_id)->where('u_id', $User->id)->first();
 
         if(!$newsfeed)

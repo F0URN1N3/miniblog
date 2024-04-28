@@ -2,7 +2,7 @@
 @import url('https://fonts.googleapis.com/css?family=Nunito');
 
 $mainTitleHeight: 56px;
-$mainSideWidth  : 130px;
+$mainSideWidth  : 200px;
 $loginFormWidth : 360px;
 $formImageWidth : 150px;
 $formImageWidth2: 100px;
@@ -23,7 +23,7 @@ $mainFont2             : 16px;
 $toolBarFont           : 16px;
 $loginTitleFont        : 32px;
 $formMainFont          : 20px;
-$formTextBoxTextFont   : 20px;
+$formTextBoxTextFont   : 16px;
 $formIconFont          : 14px;
 $formTextBoxBorderFont : 40px;
 $formTextBoxBorderFont2: 24px;
@@ -347,13 +347,12 @@ td.right {
 }
 
 //排版
-.form.col-sm-1 {
+.form.col-sm-2 {
     padding: 0;
 
 }
 
-.form.col-sm-11 {
-    max-width : calc(100vw - #{$mainSideWidth});
+.form.col-sm-10 {
     max-height: calc(100vh - #{$mainTitleHeight});
     overflow-y: auto;
 }
