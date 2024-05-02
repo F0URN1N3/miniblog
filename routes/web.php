@@ -65,22 +65,9 @@ Route::controller(HomeController::class)->group(function(){
 });
 
 //留言回應
-Route::get('/comment', function () {
-    return view('/comment/comment');
-});
-Route::controller(CommentController::class)->group(function(){
-    Route::prefix('/{nf_id}')->group(function(){
-        Route::prefix('/comment')->group(function(){
-            Route::get('/', 'listComment');
-            Route::get('/load-more', 'loadMoreComment');
-            Route::post('/', 'insertComment');
-            Route::get('/delete', 'deleteComment');
-        });
-    });
-});
-Route::get('/newsfeed', [NewsfeedController::class, 'index']);
 Route::get('/newsfeed/{id}/comments', [NewsfeedController::class, 'getComments']);
 Route::post('/newsfeed/{id}/comments', [NewsfeedController::class, 'storeComment']);
+Route::delete('/comments/{id}', [NewsfeedController::class, 'deleteComment']);
 
 //圖片上傳測試
 Route::controller(ImageController::class)->group(function(){
