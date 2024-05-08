@@ -20,6 +20,7 @@
 </div>
 
 <div class="body_show_region form_radius">
+    @csrf
     @foreach($newsfeedList as $each_newsfeed)
 
     <div class="margin_eachNewsfeed" data-id="{{ $each_newsfeed->id }}">
@@ -151,14 +152,17 @@
         }
 
         // 刪除回應
-        $('.delete-btn').click(function() {
+        $(document).on('click', '.delete-btn', function() {
             var newsfeedId = $(this).closest('.nwsfd_goComment').data('id');
             var c_id = $(this).data('c_id');
-
+            var token= $('input[name="_token"]').val();
+            console.log(newsfeedId+' && '+ c_id);
             $.ajax({
                 url: '/comments/' + c_id,
                 type: 'DELETE',
-                dataType: 'json',
+                data:{
+                    _token: token,
+                },
                 success: function(response) {
                     loadComments(newsfeedId);
                 },

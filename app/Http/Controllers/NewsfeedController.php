@@ -35,6 +35,7 @@ class NewsfeedController extends Controller
     {
         $newsfeed = Newsfeed::findOrFail($id);
         $User= $this->GetUserData();
+        if(!$User){return redirect()->view('user.sign-in');exit;}
         // 儲存新的 comment
         $comment = new Comment();
         $comment->u_id = $User->id;
@@ -51,7 +52,7 @@ class NewsfeedController extends Controller
         $User= $this->GetUserData();
         if($User->id== $comment->u_id){
             Comment::where('id', $id)->delete();
+            return response()->json(['success' => true]);
         }
-        return response()->json(['success' => true]);
     }
 }
