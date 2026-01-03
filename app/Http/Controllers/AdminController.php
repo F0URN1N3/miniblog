@@ -122,12 +122,12 @@ class AdminController extends Controller
 
     }
 
-//備忘錄列表頁面
+//一句話列表頁面
     public function newsfeedListPage()
     {
         //先取得自己的資料
         $User = $this->GetUserData();
-        //取得備忘錄列表
+        //取得一句話列表
         $newsfeedList = Newsfeed::where('u_id', $User->id)->get();
         $name = 'newsfeed';
 
@@ -150,12 +150,12 @@ class AdminController extends Controller
         return view('admin.newsfeedlist', $binding);
     }
 
-//新增備忘錄資料頁面
+//新增一句話資料頁面
     function addNewsfeedPage()
     {
         //先取得自己的資料
         $User = $this->GetUserData();
-        //取得備忘錄列表
+        //取得一句話列表
         $newsfeed = new Newsfeed;
         $name = 'newsfeed';
         $action = '新增';
@@ -172,7 +172,7 @@ class AdminController extends Controller
         return view('admin.newsfeed', $binding);
     }
 
-//編輯備忘錄資料
+//編輯一句話資料
     function editNewsfeedProcess()
     {
         $User = $this->GetUserData();
@@ -205,7 +205,7 @@ class AdminController extends Controller
         else{
             //修改
             $action = '修改';
-            //取得備忘錄列表
+            //取得一句話列表
             $newsfeed = Newsfeed::where('id', $input['id'])->where('u_id', $User->id)->first();
 
             if(!$newsfeed){
@@ -243,12 +243,12 @@ class AdminController extends Controller
         return redirect('/admin/newsfeed/?result=success');
     }
 
-//編輯備忘錄資料
+//編輯一句話資料
     function editNewsfeedPage($newsfeed_id)
     {
         //先取得自己的資料
         $User = $this->GetUserData();
-        //取得備忘錄列表
+        //取得一句話列表
         $newsfeed = Newsfeed::where('id', $newsfeed_id)->where('u_id', $User->id)->first();
 
         if(!$newsfeed)

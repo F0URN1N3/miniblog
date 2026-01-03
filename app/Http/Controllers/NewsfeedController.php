@@ -35,15 +35,20 @@ class NewsfeedController extends Controller
     {
         $newsfeed = Newsfeed::findOrFail($id);
         $User= $this->GetUserData();
-        if(!$User){return redirect()->view('user.sign-in');exit;}
-        // 儲存新的 comment
-        $comment = new Comment();
-        $comment->u_id = $User->id;
-        $comment->nf_id = $newsfeed->id;
-        $comment->content = $request->content;
-        $comment->save();
 
-        return response()->json(['success' => true]);
+        if(!$User){
+            return response()->json(['message' => '請先登入'], 401);
+        }else{
+            // 儲存新的 comment
+            $comment = new Comment();
+            $comment->u_id = $User->id;
+            $comment->nf_id = $newsfeed->id;
+            $comment->content = $request->content;
+            $comment->save();
+
+            return response()->json(['success' => true]);
+        }
+
     }
 
     public function deleteComment($id)

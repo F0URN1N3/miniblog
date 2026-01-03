@@ -220,6 +220,14 @@ body {
         border-radius: 100%;
     }
 
+    .circle_img_mini {
+        margin       : auto;
+        cursor       : pointer;
+        width        : calc(3vw - 3px - 2px);
+        height       : calc(3vw - 3px - 2px);
+        border-radius: 100%;
+    }
+
 
 .div_clear {
     clear: both;

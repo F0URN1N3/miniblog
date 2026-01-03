@@ -32,5 +32,25 @@
     function SignUp(){
         location.href="/user/auth/sign-up";
     }
+
+    var iaoMsg= '';
+    <?PHP
+    if(isset($result)){
+        if($result == "success"){
+            echo('var iaoMsg= "修改資料成功!";');
+        }else{
+            echo('var iaoMsg= "";');
+        }
+    }
+    ?>
+    if(iaoMsg=="修改資料成功!"){
+        $.iaoAlert({
+            type: "success",
+            mode: "dark",
+            msg: iaoMsg,
+            position:'bottom-right',
+            roundedCorner:true,
+        })
+    }
 </script>
 @endsection

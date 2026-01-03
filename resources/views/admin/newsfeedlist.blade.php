@@ -9,7 +9,7 @@
 <!-- 自動產生 csrf_token 隱藏欄位-->
 {!! csrf_field() !!}
 <div class="normal_form">
-    <div class="form_title">備忘錄列表</div>
+    <div class="form_title">一句話列表</div>
     <div class="btn_group">
         <button type="button" class="btn btn-primary btn_form" onclick="AddData()">新增</button>
     </div>
@@ -18,7 +18,7 @@
         <div class="margin_eachNewsfeed">
             <span>時間: {{ $each_newsfeed->created_at }} 說：</span>
             @if(isset($User) && $User->id == $each_newsfeed->u_id)
-            <span style="float:right;"><a href="/admin/newsfeed/{{ $each_newsfeed->id }}/edit">編輯備忘錄</a></span>
+            <span style="float:right;"><a href="/admin/newsfeed/{{ $each_newsfeed->id }}/edit">編輯一句話</a></span>
             @endif
         </div>
         <div class="body_content">{{ $each_newsfeed->content }}</div>
@@ -34,7 +34,7 @@
         @endforeach
     </div>
 <script>
-    //新增備忘錄
+    //新增一句話
     function AddData()
     {
         location.href = "/admin/newsfeed/add";

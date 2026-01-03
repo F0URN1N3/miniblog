@@ -7,7 +7,7 @@
 <!-- 傳送資料到母模板，並指定變數為content -->
 @section('content')
 <div>
-    <p class="body_title">{{ $userData->name }}的備忘錄列表</p>
+    <p class="body_title">{{ $userData->name }}的一句話列表</p>
 </div>
 <div class="body_show_region form_radius">
     @csrf
@@ -17,7 +17,7 @@
         <span class="nwsfd_u_name">{{ $each_newsfeed->name }}</span>
         <span>{{ $each_newsfeed->created_at }} 說：</span>
             @if(isset($User) && $User->id == $each_newsfeed->u_id)
-            <span style="float:right;"><a href="/admin/newsfeed/{{ $each_newsfeed->id }}/edit">修改備忘錄</a></span>
+            <span style="float:right;"><a href="/admin/newsfeed/{{ $each_newsfeed->id }}/edit">修改一句話</a></span>
             @endif
     </div>
     <div class="body_content">{{ $each_newsfeed->content }}</div>
@@ -94,8 +94,14 @@
                 success: function(response) {
                     loadComments(newsfeedId);
                 },
-                error: function(){
-                    window.location.href = "http://miniblog.test/user/auth/sign-in";
+                error: function(xhr, status, error){
+                    // 處理錯誤情況
+                    if (xhr.status === 401) {
+                        // 顯示警告訊息
+                        alert(xhr.responseJSON.message);
+                        // 如果需要，導向登入頁面
+                        window.location.href = "/user/auth/sign-in?redirect=/{{ $userData->id }}/newsfeed";
+                    }
                 }
             });
         });
@@ -147,20 +153,22 @@
             var newsfeedId = $(this).closest('.nwsfd_goComment').data('id');
             var c_id = $(this).data('c_id');
             var token= $('input[name="_token"]').val();
-            console.log(newsfeedId+' && '+ c_id);
-            $.ajax({
-                url: '/comments/' + c_id,
-                type: 'DELETE',
-                data:{
-                    _token: token,
-                },
-                success: function(response) {
-                    loadComments(newsfeedId);
-                },
-                error: function(xhr, status, error) {
-                    console.error('Error:', error);
-                }
-            });
+            var confirmY= confirm("確定要刪除這則回應嗎？");
+            if(confirmY){
+                    $.ajax({
+                    url: '/comments/' + c_id,
+                    type: 'DELETE',
+                    data:{
+                        _token: token,
+                    },
+                    success: function(response) {
+                        loadComments(newsfeedId);
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error:', error);
+                    }
+                });
+            }
         });
     });
 </script>

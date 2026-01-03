@@ -79,7 +79,7 @@ class UserAuthController extends Controller
         //session紀錄會員編號
         session()->put('user_id', $User->id);
 
-        return redirect('/');
+        return redirect('admin/user/')->with('signUpResult','success');
 
         exit;
     }
@@ -97,7 +97,7 @@ class UserAuthController extends Controller
     }
 
 //使用者登入程式
-    public function signInProcess(){
+    public function signInProcess(Request $request){
         //接收輸入資料
         $input = request()->all();
 
@@ -162,7 +162,14 @@ class UserAuthController extends Controller
         session()->put('user_id', $User->id);
 
         //重新導向到原先使用者造訪頁面，沒有嘗試造訪頁則重新導向回自我介紹頁
-        return redirect()->intended('/');
+        // 如果登入成功，檢查是否有重定向參數
+        if($request->has('redirect')){
+            // 如果有重定向參數，將用戶重定向到該頁面
+            return redirect($request->input('redirect'));
+        }else{
+            // 否則，將用戶重定向到默認頁面
+            return redirect('/');
+        }
 
         exit;
     }

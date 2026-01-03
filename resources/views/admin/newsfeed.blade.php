@@ -11,9 +11,9 @@
 {!! csrf_field() !!}
 <input name="id" type="hidden" value="{{ $newsfeed->id }}"/>
 <div class="normal_form">
-    <div class="form_title">{{ $action }}備忘錄</div>
+    <div class="form_title">{{ $action }}一句話</div>
     <div class="form-group">
-        <label for="exampleFormControlTextarea1">任務內容</label>
+        <label for="exampleFormControlTextarea1">一句話內容</label>
         <textarea class="form-control" name="content" rows="3">{{ $newsfeed->content }}</textarea>
     </div>
 

@@ -29,7 +29,7 @@ class HomeController extends Controller
 
         $newsfeedList=
         Newsfeed::query()
-        ->select('newsfeeds.*', 'users.name')
+        ->select('newsfeeds.*', 'users.name', 'users.picture')
         ->join('users', 'users.id', '=', 'newsfeeds.u_id')
         ->orderBy('created_at', 'desc')
         ->get()

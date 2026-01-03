@@ -29,7 +29,7 @@
                     <li><a class="dropdown-item" href="/">回到首頁</a></li>
                 @if(session()->has('user_id'))
                     <li><a class="dropdown-item" href="/admin/user">編輯個人資料</a></li>
-                    <li><a class="dropdown-item" href="/admin/newsfeed">備忘錄列表</a></li>
+                    <li><a class="dropdown-item" href="/admin/newsfeed">一句話列表</a></li>
                     <hr>
                     <li><a class="dropdown-item" href="/user/auth/sign-out">登出</a></li>
                 @else
@@ -48,7 +48,7 @@
                     @if ($page== "user")
                         <!-- 首頁 -->
                         <li>
-                            組員<h4>{{ $userData->name }}</h4>
+                            您正在參觀<p>【{{ $userData->name }}】的小天地</p>
                         </li>
                         <!-- 自我介紹 -->
                         <li
@@ -56,7 +56,7 @@
                             class="active"
                         @endif
                         >
-                            <a href="/{{ $userData->id }}/user">組員資料</a>
+                            <a href="/{{ $userData->id }}/user">使用者資料</a>
                         </li>
                         <!-- 隨口說說 -->
                         <li
@@ -64,7 +64,7 @@
                             class="active"
                         @endif
                         >
-                            <a href="/{{ $userData->id }}/newsfeed">備忘錄列表</a>
+                            <a href="/{{ $userData->id }}/newsfeed">一句話列表</a>
                         </li>
                         <hr>
                         <li><a href="/">回到首頁</a></li>
@@ -83,7 +83,7 @@
                             class="active"
                         @endif
                         >
-                            <a href="/admin/newsfeed">備忘錄列表</a>
+                            <a href="/admin/newsfeed">一句話列表</a>
                         </li>
                         <hr>
                         <li><a href="/">回到首頁</a></li>
@@ -116,7 +116,7 @@
                         @endif
                     @endif
                 </ul>
-                <div style="position: absolute; bottom: 1%; left:1%;"><?php echo date('Y-m-d')?></div>
+                <div style="position: absolute; bottom: 1%; left:1%;"><?php //echo date('Y-m-d'); ?></div>
             </div>
             <div class="col-sm-10 background_white2">
                 @yield('content')

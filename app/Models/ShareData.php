@@ -9,5 +9,5 @@ class ShareData extends Model
 {
     use HasFactory;
 
-    const TITLE= '小組備忘錄';
+    const TITLE= '一句話部落格';
 }

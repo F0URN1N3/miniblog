@@ -100,21 +100,45 @@ var loadFile = function(event) {
 
 <script type="module">
     var iaoMsg= '';
-    <?PHP
+    var iaoMsg2= '';
+
+<?PHP
     if(isset($result)){
         if($result == "success"){
-            echo('var iaoMsg= "修改資料成功!";');
+            echo('var iaoMsg= "修改資料成功！";console.log("修改資料成功");');
         }else{
-            echo('var iaoMsg= "";');
+            echo('var iaoMsg= "";console.log("修改資料失敗");');
         }
     }
+?>
+@if(session()->has('signUpResult'))
+    @php
+        $result = session('signUpResult');
+        echo('console.log("' . $result . '");');
+        echo('var iaoMsg2 = "註冊成功！";');
+    @endphp
+@else
+        console.log("沒有 session");
+        var iaoMsg2 = "";
+@endif
 
-    ?>
-    if(iaoMsg=="修改資料成功!"){
+    if(iaoMsg!=""){
+
         $.iaoAlert({
             type: "success",
             mode: "dark",
             msg: iaoMsg,
+            position:'bottom-right',
+            roundedCorner:true,
+        })
+    }
+
+    if(iaoMsg2!=""){
+
+        $.iaoAlert({
+            type: "success",
+            mode: "dark",
+            msg: iaoMsg2,
             position:'bottom-right',
             roundedCorner:true,
         })
