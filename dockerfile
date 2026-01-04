@@ -25,8 +25,14 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 RUN composer install --optimize-autoloader --no-scripts --ignore-platform-reqs
 
 # 4. 設定目錄權限 (避免 Facade 報錯)
-RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
-RUN chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
+# 建立資料夾並設定權限
+RUN mkdir -p /var/www/html/public/images/UserPictures && \
+    chown -R www-data:www-data /var/www/html/storage \
+    /var/www/html/bootstrap/cache \
+    /var/www/html/public/images/UserPictures && \
+    chmod -R 775 /var/www/html/storage \
+    /var/www/html/bootstrap/cache \
+    /var/www/html/public/images/UserPictures
 
 # 5. Apache 設定
 ENV APACHE_DOCUMENT_ROOT /var/www/html/public
