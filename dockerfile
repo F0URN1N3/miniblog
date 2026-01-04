@@ -1,6 +1,6 @@
 FROM php:8.2-apache
 
-# 安裝系統套件與 PHP 擴充
+# 1. 安裝系統依賴
 RUN apt-get update && apt-get install -y \
     libpng-dev \
     libjpeg-dev \
@@ -14,23 +14,26 @@ RUN apt-get update && apt-get install -y \
 
 RUN a2enmod rewrite
 
+# 2. 複製程式碼
 COPY . /var/www/html
 WORKDIR /var/www/html
 
-# 安裝 Composer 並禁用腳本防止 Build 時崩潰
+# 3. 安裝 Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
-RUN composer install --no-dev --optimize-autoloader --no-scripts
 
-# 【關鍵步驟】設定權限，解決 Facade root has not been set 問題
+# 【重點修改】：拿掉 --no-dev，確保所有 Class 都能被找到
+RUN composer install --optimize-autoloader --no-scripts
+
+# 4. 設定目錄權限 (避免 Facade 報錯)
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
 RUN chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
 
-# 設定 Apache
+# 5. Apache 設定
 ENV APACHE_DOCUMENT_ROOT /var/www/html/public
 RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf
 RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf
 
 EXPOSE 80
 
-# 啟動時清理快取
+# 6. 啟動指令：清理快取並啟動 Apache
 CMD php artisan config:clear && php artisan cache:clear && apache2-foreground
