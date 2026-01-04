@@ -103,7 +103,7 @@ class AdminController extends Controller
             ]);
             $securePath = $uploadedFile->getSecurePath();
             $User->picture = $securePath;
-
+            $User->save();
         }
 
         if($input['name']!= null){
