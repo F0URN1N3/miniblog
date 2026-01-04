@@ -63,7 +63,7 @@
                 @if($User->picture == "")
                     src="/images/nopic.png"
                 @else
-                    src="/{{$User->picture}}"
+                    src="{{$User->picture}}"
                 @endif
                 />
             </div>

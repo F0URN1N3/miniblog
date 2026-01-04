@@ -22,7 +22,7 @@
                 @if (!$User || $User->picture=='')
                     src="/images/gears.png"
                 @else
-                    src="/{{$User->picture}}"
+                    src="{{$User->picture}}"
                 @endif
                 style="height:60px;" class="btn" data-bs-toggle="dropdown"aria-expanded="false">
                 <ul class="dropdown-menu dropdown-menu-end">

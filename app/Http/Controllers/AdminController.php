@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Intervention\Image\ImageManager;
 use Intervention\Image\Drivers\Gd\Driver;
+use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 
 class AdminController extends Controller
 {
@@ -74,20 +75,35 @@ class AdminController extends Controller
         }
 
         if($request->file('file')){
-            //刪除舊照片
-            $old_picture= $User->picture;
-            if($old_picture!=null && file_exists(public_path($old_picture))){
-                unlink(public_path($old_picture));
-            }
-            //新增大頭貼
-            $img_request= $request->file('file');
-            $img_manager= new ImageManager(new Driver());
-            $extension_name= $img_request->getClientOriginalExtension();
-            $file_name= uniqid().'.'.$extension_name;
-            $relative_path= 'images/UserPictures/'.$file_name;
-            $full_path= public_path($relative_path);
-            $img_manager->read($img_request)->resize(300, 300)->save($full_path);
-            $User->picture= $relative_path;
+            // 本機開發使用code↓
+            // //刪除舊照片
+            // $old_picture= $User->picture;
+            // if($old_picture!=null && file_exists(public_path($old_picture))){
+            //     unlink(public_path($old_picture));
+            // }
+            // //新增大頭貼
+            // $img_request= $request->file('file');
+            // $img_manager= new ImageManager(new Driver());
+            // $extension_name= $img_request->getClientOriginalExtension();
+            // $file_name= uniqid().'.'.$extension_name;
+            // $relative_path= 'images/UserPictures/'.$file_name;
+            // $full_path= public_path($relative_path);
+            // $img_manager->read($img_request)->resize(300, 300)->save($full_path);
+            // $User->picture= $relative_path;
+            // 本機開發使用code↑
+            $img_request = $request->file('file');
+            $uploadedFile = Cloudinary::upload($img_request->getRealPath(), [
+                'folder' => 'user_avatars', // 雲端資料夾名稱
+                'transformation' => [
+                'width' => 300,
+                'height' => 300,
+                'crop' => 'fill', // 裁切成 300x300 正方形
+                'gravity' => 'face' // 聰明功能：自動對焦在人臉！
+                ]
+            ]);
+            $securePath = $uploadedFile->getSecurePath();
+            $User->picture = $securePath;
+
         }
 
         if($input['name']!= null){
