@@ -35,5 +35,8 @@ RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.
 
 EXPOSE 80
 
-# 6. 啟動指令：清理快取並啟動 Apache
-CMD php artisan config:clear && php artisan cache:clear && apache2-foreground
+# 這裡就是我們自動執行指令的地方
+# 1. 清理快取 2. 強制執行資料庫遷移 3. 啟動 Apache
+CMD php artisan config:cache && \
+    php artisan migrate --force && \
+    apache2-foreground
