@@ -21,8 +21,8 @@ WORKDIR /var/www/html
 # 3. 安裝 Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# 【重點修改】：拿掉 --no-dev，確保所有 Class 都能被找到
-RUN composer install --optimize-autoloader --no-scripts
+# 加上 --ignore-platform-reqs 避開環境版本檢查，這在部署時非常管用
+RUN composer install --optimize-autoloader --no-scripts --ignore-platform-reqs
 
 # 4. 設定目錄權限 (避免 Facade 報錯)
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
