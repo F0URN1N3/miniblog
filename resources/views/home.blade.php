@@ -13,7 +13,7 @@
             @if($each_user->picture == "")
                 src="/images/nopic.png"
             @else
-                src="/{{ $each_user->picture }}"
+                src="{{ $each_user->picture }}"
             @endif
             />
     @endforeach
@@ -28,7 +28,7 @@
             @if($each_newsfeed->picture == "")
                 src="/images/nopic.png"
             @else
-                src="/{{ $each_newsfeed->picture }}"
+                src="{{ $each_newsfeed->picture }}"
             @endif
         />
         <span class="nwsfd_u_name">{{ $each_newsfeed->name }}</span>
