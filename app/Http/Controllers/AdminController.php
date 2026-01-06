@@ -71,7 +71,9 @@ class AdminController extends Controller
                 'User'=> $User,
                 'result' => '',
             ];
-            return view('admin.edituser', $binding)->withErrors($validator);
+            /** @var \Illuminate\View\View $view */
+            $view = view('admin.edituser', $binding);
+            return $view->withErrors($validator);
         }
 
         if($request->file('file')){
@@ -132,9 +134,9 @@ class AdminController extends Controller
             'User' => $User,
             'result' => 'success',
         ];
-        return view('admin.edituser', $binding)
-                ->withErrors($validator);
-
+        /** @var \Illuminate\View\View $view */
+        $view = view('admin.edituser', $binding);
+        return $view->withErrors($validator);
 
     }
 
@@ -144,7 +146,7 @@ class AdminController extends Controller
         //先取得自己的資料
         $User = $this->GetUserData();
         //取得一句話列表
-        $newsfeedList = Newsfeed::where('u_id', $User->id)->get();
+        $newsfeedList = Newsfeed::where('u_id', $User->id)->orderBy('created_at', 'desc')->get();
         $name = 'newsfeed';
 
         //接收輸入資料
@@ -241,8 +243,9 @@ class AdminController extends Controller
                 'action' => $action,
                 'result' => '',
             ];
-            return view('admin.newsfeed', $binding)
-                ->withErrors($validator);
+            /** @var \Illuminate\View\View $view */
+            $view = view('admin.newsfeed', $binding);
+            return $view->withErrors($validator);
         }
         //新增
         if($input['id'] == ''){
@@ -286,5 +289,23 @@ class AdminController extends Controller
             'result' => '',
         ];
         return view('admin.newsfeed', $binding);
+    }
+
+    public function deleteNewsfeedProcess($newsfeed_id)
+    {
+        $user = $this->GetUserData();
+        if (!$user) return redirect('/login');
+
+        // 確保刪除的是自己的貼文
+        $newsfeed = Newsfeed::where('id', $newsfeed_id)
+                    ->where('u_id', $user->id)
+                    ->first();
+
+        if ($newsfeed) {
+            $newsfeed->delete();
+            return redirect('/admin/newsfeed')->with('success', '刪除成功');
+        }
+
+        return redirect('/admin/newsfeed');
     }
 }
