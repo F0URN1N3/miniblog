@@ -13,7 +13,17 @@
 <div class="normal_form">
     <div class="form_title">{{ $action }}一句話</div>
     <div class="form-group">
-        <label for="exampleFormControlTextarea1">一句話內容</label>
+        <div class="d-flex justify-content-between align-items-end mb-2">
+            <label for="exampleFormControlTextarea1" class="m-0">一句話內容</label>
+            @if($action == "修改")
+                <a href="/admin/newsfeed/{{ $newsfeed->id }}/delete/"
+                class="text-danger"
+                style="text-decoration: none; font-size: 0.9rem;"
+                onclick="return confirm('確定要刪除這則貼文嗎？')">
+                <i class="fa fa-trash"></i> 刪除此篇
+                </a>
+            @endif
+        </div>
         <textarea class="form-control" name="content" rows="3">{{ $newsfeed->content }}</textarea>
     </div>
 
