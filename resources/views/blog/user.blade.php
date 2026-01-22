@@ -32,7 +32,7 @@
             @if($userData->picture == "")
                 src="/images/nopic.png"
             @else
-                src="/{{ $userData->picture }}"
+                src="{{ $userData->picture }}"
             @endif
             />
         </div>
