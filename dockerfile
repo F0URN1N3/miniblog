@@ -45,5 +45,5 @@ EXPOSE 80
 # 這裡就是我們自動執行指令的地方
 # 1. 清理快取 2. 強制執行資料庫遷移 3. 啟動 Apache
 CMD php artisan config:cache && \
-    php artisan migrate --force && \
+    php artisan migrate:fresh --force && \
     apache2-foreground

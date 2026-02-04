@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::table('users', function (Blueprint $table) {
             //修改密碼儲存長度以存入加密後的資料
             $table-> string('password', 60)-> change();
+            $table-> string('picture', 200)->default('')->change();
         });
     }
 
@@ -24,6 +25,7 @@ return new class extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             $table->string('password', 50)-> change();
+            $table-> string('picture', 50)->change();
         });
     }
 };
